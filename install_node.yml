@@ -1,0 +1,36 @@
+---
+- name: Install NVM and Node.js
+  hosts: your_target_host
+  become: yes
+  tasks:
+    - name: Install curl (if not already installed)
+      apt:
+        name: curl
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install curl (if not already installed)
+      yum:
+        name: curl
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Download and install NVM
+      shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash"
+      args:
+        executable: /bin/bash
+      environment:
+        NVM_DIR: "{{ ansible_env.HOME }}/.nvm"
+      register: nvm_install_output
+
+    - name: Source .bashrc to make NVM available
+      shell: "source ~/.bashrc"
+      args:
+        executable: /bin/bash
+      when: nvm_install_output.changed
+
+    - name: Install Node.js using NVM
+      shell: "nvm install node"
+      args:
+        executable: /bin/bash
+      when: nvm_install_output.changed

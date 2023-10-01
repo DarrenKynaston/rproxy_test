@@ -1,6 +1,6 @@
 ---
 - name: Install NVM and Node.js
-  hosts: your_target_host
+  hosts: localhost
   become: yes
   tasks:
     - name: Install curl (if not already installed)

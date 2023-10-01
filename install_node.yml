@@ -1,6 +1,7 @@
 ---
 - name: Install NVM and Node.js
   hosts: localhost
+  connection: local
   become: yes
   tasks:
     - name: Install curl (if not already installed)
